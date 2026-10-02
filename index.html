@@ -107,7 +107,7 @@ background:radial-gradient(circle at 50% -5%,#214b67 0,#0a1421 38%,#03060b 100%)
   .fipHeader{font-size:11px;padding:6px 11px;top:6px}
 }
 
-</style>
+\n.clueChoice{font-size:16px!important;padding:14px 12px!important;}\n#clueOptions .secondary{min-height:52px;}\n</style>
 </head>
 <body>
 <div class="fipHeader">FIP-18 • KSHEA Dharwad</div>
@@ -188,10 +188,10 @@ const rooms=[
 
 const nextClues=[
  {text:"Great start! 🔑 Now let's follow the workers' job details. Where would you find information about the time taken for different jobs?", options:["🏭 Work Floor","💼 Accountant's Office","📂 Job Records Room","🔐 Costing Vault"], answer:2},
- {text:"Enough looking at clothes! 👕 Now we need numbers. Where would the factory keep its important costing figures?", options:["🏭 Work Floor","📂 Job Records Room","💼 Accountant's Office","🔐 Costing Vault"], answer:3},
- {text:"If numbers could talk, they would probably ask for the accountant! 😄 Where does the accountant do the daily accounts work?", options:["🏭 Work Floor","🔐 Costing Vault","📂 Job Records Room","💼 Accountant's Office"], answer:3},
- {text:"One job has lost something important… and it isn't the worker! 😄 A job file is missing its overhead amount. Where should we look?", options:["🔐 Costing Vault","💼 Accountant's Office","🏭 Work Floor","📂 Job Costing Room"], answer:3},
- {text:"Five keys collected… one mystery remains… 🔐 Where is the final treasure waiting?", options:["💼 Accountant's Office","📂 Job Costing Room","🔐 Costing Vault","🏆 Treasure Chamber"], answer:3}
+ {text:"Enough looking at clothes! 👕 Now we need numbers. Where would the factory keep its important costing figures?", options:["🏭 Work Floor","📂 Job Records Room","📢 Marketing Department","🔐 Costing Vault"], answer:3},
+ {text:"If numbers could talk, they would probably ask for the accountant! 😄 Something doesn't look right in the costing records. Where should we investigate next?", options:["🏭 Work Floor","🔐 Costing Vault","📂 Job Records Room","💼 Accountant's Office"], answer:3},
+ {text:"One job has lost something important… and it isn't the worker! 😄 A job file is missing its overhead amount. Where should we look?", options:["🔐 Costing Vault","📢 Marketing Department","🏭 Work Floor","📂 Job Costing Room"], answer:3},
+ {text:"Five keys collected… one mystery remains! 🔐 The master costing file is almost recovered. Where is the final treasure waiting?", options:["💼 Accountant's Office","📂 Job Costing Room","🔐 Costing Vault","🏆 Treasure Chamber"], answer:3}
 ];
 
 let room=0,score=0,keys=0,time=720,team="",locked=false,timer,code="";
