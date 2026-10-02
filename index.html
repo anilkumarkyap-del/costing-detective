@@ -107,7 +107,8 @@ background:radial-gradient(circle at 50% -5%,#214b67 0,#0a1421 38%,#03060b 100%)
   .fipHeader{font-size:11px;padding:6px 11px;top:6px}
 }
 
-\n.clueChoice{font-size:16px!important;padding:14px 12px!important;}\n#clueOptions .secondary{min-height:52px;}\n</style>
+.clueChoice{font-size:16px!important;padding:14px 12px!important;}
+#clueOptions .secondary{min-height:52px;}</style>
 </head>
 <body>
 <div class="fipHeader">FIP-18 • KSHEA Dharwad</div>
@@ -238,35 +239,80 @@ function feedback(ok,msg){
 function showKey(){
  locked=true;
  let c=document.getElementById("content");
- let a=document.createElement("div");a.className="keyAnimation";a.style.display="block";
- a.innerHTML=`<div class="keyGlow">🗝️</div><div class="ring">KEY ${keys} RECOVERED!</div>`;
+ let a=document.createElement("div");
+ a.className="keyAnimation";
+ a.style.display="block";
+ a.innerHTML=`<div class="keyGlow">🗝️</div><div class="ring">KEY ${keys+1} RECOVERED!</div>`;
  c.appendChild(a);
+
  setTimeout(()=>{
-  rewardKey();
-  showUnlock();
+   rewardKey();
+   showUnlock();
  },1850);
 }
+
 function showUnlock(){
- let modal=document.getElementById("unlock");
- modal.style.display="flex";
- document.getElementById("unlockText").textContent=`🗝️ KEY ${keys} RECOVERED!`;
- document.getElementById("unlockLocker").textContent="🔑";
+ let c=document.getElementById("content");
  let clue=nextClues[keys-1];
- if(!clue){ modal.style.display="none"; finish(); return; }
- document.getElementById("unlockSub").innerHTML=`<b>🕵️ NEXT CLUE</b><br><span style="display:block;margin:12px 0 18px;line-height:1.5">${clue.text}</span><div id="clueOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div><div id="clueFeedback" style="margin-top:14px"></div>`;
+
+ if(!clue){
+   finish();
+   return;
+ }
+
+ /* Show the clue DIRECTLY on the page.
+    This avoids relying on the popup/modal and makes the clue visible
+    on desktop and mobile browsers. */
+ c.innerHTML += `
+   <div id="cluePanel" class="card" style="
+      margin:24px auto;
+      max-width:850px;
+      text-align:center;
+      border:2px solid var(--gold);
+      background:linear-gradient(145deg,#211b0b,#13243a);
+      box-shadow:0 0 35px #f6c45322;
+   ">
+     <div style="font-size:42px">🔑</div>
+     <h2 style="color:var(--gold);margin:5px 0 12px">NEXT CLUE</h2>
+     <p style="font-size:18px;line-height:1.6;color:#eef6ff">${clue.text}</p>
+     <div id="clueOptions" class="choiceGrid" style="margin-top:20px"></div>
+     <div id="clueFeedback"></div>
+   </div>`;
+
  let box=document.getElementById("clueOptions");
- box.innerHTML=clue.options.map((opt,i)=>`<button class="secondary" style="width:100%" onclick="chooseNextRoom(${i})">${opt}</button>`).join("");
+ box.innerHTML=clue.options.map((opt,i)=>
+   `<button class="choice" onclick="chooseNextRoom(${i})">${opt}</button>`
+ ).join("");
+
+ document.getElementById("cluePanel").scrollIntoView({
+   behavior:"smooth",
+   block:"center"
+ });
 }
+
 function chooseNextRoom(i){
- if(i===nextClues[keys-1].answer){
-   document.getElementById("clueFeedback").innerHTML=`<div class="feedback good">🔓 <b>That's it!</b> You found the right room. Let's investigate!</div>`;
+ let clue=nextClues[keys-1];
+ let fb=document.getElementById("clueFeedback");
+
+ if(i===clue.answer){
+   fb.innerHTML=`<div class="feedback good">
+     🔓 <b>That's it!</b> You found the right clue. Let's investigate!
+   </div>`;
+
+   document.querySelectorAll("#clueOptions .choice").forEach((b,index)=>{
+     b.disabled=true;
+     if(index===i) b.classList.add("correct");
+   });
+
    setTimeout(()=>{
-     document.getElementById("unlock").style.display="none";
      room++;
      render();
+     window.scrollTo({top:0,behavior:"smooth"});
    },900);
  }else{
-   document.getElementById("clueFeedback").innerHTML=`<div class="feedback bad">🔎 <b>Not here!</b> Even our detective instincts need a little help. Read the clue again.</div>`;
+   fb.innerHTML=`<div class="feedback bad">
+     🔎 <b>Not here!</b> Even our detective instincts need a little help. Read the clue again.
+   </div>`;
  }
 }
 
