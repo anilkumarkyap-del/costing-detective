@@ -358,7 +358,7 @@ function vaultCheck(){
 }
 function accountant(c){
  c.innerHTML=`<div class="quote"><b>Junior Accountant's Note:</b><br><br>“I charged ₹60,000 overhead using 3,000 <b>units</b> and obtained ₹20 per unit. I think the costing sheet is correct.”</div>
- <div class="card" style="margin-top:18px"><h3>📋 Factory instruction</h3><p>The production manager selected <b>Labour Hour Rate</b> as the absorption method.</p><p><b>Detective task:</b> Find the part of the accountant's reasoning that does not belong.</p></div>
+ <div class="card" style="margin-top:18px"><h3>📋 Factory instruction</h3><p>The production manager selected <b>Labour Hour Rate</b> as the absorption method.</p><p><b>Detective task:</b>What did the accountant use wrongly?</p></div>
  <div class="choiceGrid"><button class="choice" onclick="accountPick('base')">📦 He used <b>units</b> as the base</button><button class="choice" onclick="accountPick('amount')">💵 He used ₹60,000 overhead</button><button class="choice" onclick="accountPick('number')">🔢 He used 3,000</button><button class="choice" onclick="accountPick('math')">➗ He divided one amount by another</button></div>`;
 }
 function accountPick(v){
