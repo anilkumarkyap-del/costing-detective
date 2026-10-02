@@ -85,9 +85,32 @@ background:radial-gradient(circle at 50% -5%,#214b67 0,#0a1421 38%,#03060b 100%)
 .unlockIcon{font-size:80px;animation:unlock .9s ease}.unlockText{font-size:26px;font-weight:900;color:var(--green)}
 @keyframes unlock{0%{transform:rotate(-25deg) scale(.5)}50%{transform:rotate(12deg) scale(1.2)}100%{transform:rotate(0) scale(1)}}
 @media(max-width:800px){.lockerMap{grid-template-columns:repeat(3,1fr)}.board,.choiceGrid{grid-template-columns:1fr}.content{padding:18px}.titleRow h2{font-size:25px}}
+
+.fipHeader{
+  position:fixed;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:100;
+  background:rgba(5,9,17,.88);
+  border:1px solid #46617f;
+  border-radius:999px;
+  padding:7px 16px;
+  color:#f6c453;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:1px;
+  box-shadow:0 8px 24px #0007;
+  white-space:nowrap;
+}
+@media(max-width:600px){
+  .fipHeader{font-size:11px;padding:6px 11px;top:6px}
+}
+
 </style>
 </head>
 <body>
+<div class="fipHeader">FIP-18 • KSHEA Dharwad</div>
 <div class="wrap">
 <div class="top">
 <div class="brand">COSTING DETECTIVE • THE GREAT TREASURE HUNT</div>
@@ -162,6 +185,15 @@ const rooms=[
   correct:"800"}
 ];
 
+
+const nextClues=[
+ {text:"Great start! 🔑 Now let's follow the workers' job details. Where would you find information about the time taken for different jobs?", options:["🏭 Work Floor","💼 Accountant's Office","📂 Job Records Room","🔐 Costing Vault"], answer:2},
+ {text:"Enough looking at clothes! 👕 Now we need numbers. Where would the factory keep its important costing figures?", options:["🏭 Work Floor","📂 Job Records Room","💼 Accountant's Office","🔐 Costing Vault"], answer:3},
+ {text:"If numbers could talk, they would probably ask for the accountant! 😄 Where does the accountant do the daily accounts work?", options:["🏭 Work Floor","🔐 Costing Vault","📂 Job Records Room","💼 Accountant's Office"], answer:3},
+ {text:"One job has lost something important… and it isn't the worker! 😄 A job file is missing its overhead amount. Where should we look?", options:["🔐 Costing Vault","💼 Accountant's Office","🏭 Work Floor","📂 Job Costing Room"], answer:3},
+ {text:"Five keys collected… one mystery remains… 🔐 Where is the final treasure waiting?", options:["💼 Accountant's Office","📂 Job Costing Room","🔐 Costing Vault","🏆 Treasure Chamber"], answer:3}
+];
+
 let room=0,score=0,keys=0,time=720,team="",locked=false,timer,code="";
 
 function begin(){
@@ -215,19 +247,29 @@ function showKey(){
  },1850);
 }
 function showUnlock(){
- let modal=document.getElementById("unlock");modal.style.display="flex";
- document.getElementById("unlockText").textContent=`🗝️ KEY ${keys} FOUND!`;
- document.getElementById("unlockSub").textContent=keys<5?"The key fits the next locker. Watch it unlock!":"Five keys recovered. The final treasure chamber is ready.";
- document.getElementById("unlockLocker").textContent="🔒";
- setTimeout(()=>{
-  document.getElementById("unlockLocker").textContent="🔓";
-  document.getElementById("unlockLocker").style.color="#53df83";
- },650);
- setTimeout(()=>{
-  modal.style.display="none";
-  if(room<5){room++;render()}else finish();
- },1450);
+ let modal=document.getElementById("unlock");
+ modal.style.display="flex";
+ document.getElementById("unlockText").textContent=`🗝️ KEY ${keys} RECOVERED!`;
+ document.getElementById("unlockLocker").textContent="🔑";
+ let clue=nextClues[keys-1];
+ if(!clue){ modal.style.display="none"; finish(); return; }
+ document.getElementById("unlockSub").innerHTML=`<b>🕵️ NEXT CLUE</b><br><span style="display:block;margin:12px 0 18px;line-height:1.5">${clue.text}</span><div id="clueOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div><div id="clueFeedback" style="margin-top:14px"></div>`;
+ let box=document.getElementById("clueOptions");
+ box.innerHTML=clue.options.map((opt,i)=>`<button class="secondary" style="width:100%" onclick="chooseNextRoom(${i})">${opt}</button>`).join("");
 }
+function chooseNextRoom(i){
+ if(i===nextClues[keys-1].answer){
+   document.getElementById("clueFeedback").innerHTML=`<div class="feedback good">🔓 <b>That's it!</b> You found the right room. Let's investigate!</div>`;
+   setTimeout(()=>{
+     document.getElementById("unlock").style.display="none";
+     room++;
+     render();
+   },900);
+ }else{
+   document.getElementById("clueFeedback").innerHTML=`<div class="feedback bad">🔎 <b>Not here!</b> Even our detective instincts need a little help. Read the clue again.</div>`;
+ }
+}
+
 function records(c){
  c.innerHTML=`<div class="board">
  <div class="card clickCard" onclick="recordsPick(this,'units')"><h3>📦 Units</h3><p>School uniforms: 1,200 units<br>Formal shirts: 800 units</p></div>
